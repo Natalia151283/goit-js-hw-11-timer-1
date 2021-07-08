@@ -1,13 +1,17 @@
 import './scss/main.scss';
 
-const refs ={
-timerFace : document.querySelector("#timer-1"),
-startBnt : document.querySelector("button[data-action-start]"),
-stoptBnt : document.querySelector("button[data-action-stop]")
-};
+const timerFace = document.querySelector("#timer-1");
+const startBnt = document.querySelector("button[data-action-start]")
+const stoptBnt = document.querySelector("button[data-action-stop]")
+
+startBnt.addEventListener('click', () =>{
+  CountdownTimer.start();
+})
 
 class CountdownTimer {
-  constructor({ selector, targetDate }){
+
+  
+  constructor({ selector, targetDate }) {
     this.intervalId = null;
     this.isActive = false;
     this.targetDate = targetDate;
@@ -15,30 +19,27 @@ class CountdownTimer {
     this.start();
    
   }
-  start(){
-    if(this.isActive){
+
+  start() {
+    if (this.isActive) {
       return;
     }
-    const futureDate = this.targetDate;
+   
     this.isActive = true;
-    this.intervalId = window.setInterval(() =>{
+
+    this.intervalId = setInterval(() => {
       const currentTime = Date.now();
-     
-      const deltaTime = futureDate - currentTime;
+      const deltaTime = this.targetDate -currentTime;
       const time = this.getTime(deltaTime);
-     
-     
+
+      console.log(time);
+
       this.selector.querySelector('span[data-value="days"]').textContent = time.days;
       this.selector.querySelector('span[data-value="hours"]').textContent = time.hours;
       this.selector.querySelector('span[data-value="mins"]').textContent = time.mins;
       this.selector.querySelector('span[data-value="secs"]').textContent = time.secs;
-    },1000)
-  };
-  stop(){
-   clearInterval(this.intervalId);
-    this.isActive = false;
-    // const time = this.getTime(0);
-  };
+    }, 1000);
+  }
 
 
   getTime(time) {
@@ -55,20 +56,5 @@ class CountdownTimer {
     return String(value).padStart(2, "0");
   }
 }
-const timer = new CountdownTimer({
-  selector: "#timer-1", targetDate: new Date("Jul 17, 2021")
-})
 
-
-refs.startBnt.addEventListener('click', () =>{
-  timer.start();
-});
-
-refs.stoptBnt.addEventListener('click', () =>{
-  timer.stop();
-});
-
-// function updateClock({days, hours, mins, secs}){
-//   refs.timerFace.textContent = `${days}:${hours}:${mins}:${secs}`;
-// }
-
+new CountdownTimer({selector: "#timer-1", targetDate: new Date("Jul 17, 2021")});
