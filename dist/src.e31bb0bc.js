@@ -205,7 +205,46 @@ function _defineProperties(target, props) { for (var i = 0; i < props.length; i+
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
-var timerFace = document.querySelector("#timer-1");
+var refs = {
+  timerFace: document.querySelector("#timer-1"),
+  startBnt: document.querySelector("button[data-action-start]"),
+  stoptBnt: document.querySelector("button[data-action-stop]")
+}; // class CountdownTimer {
+//   constructor({ selector, targetDate }) {
+//     this.targetDate = targetDate;
+//     this.selector = document.querySelector(selector);
+//     this.start();
+//   }
+//   start() {
+//     if (this.isActive) {
+//       return;
+//     }
+//     this.isActive = true;
+//     this.intervalId = setInterval(() => {
+//       const currentTime = Date.now();
+//       const deltaTime = this.targetDate -currentTime;
+//       const time = this.getTime(deltaTime);
+//       console.log(time);
+//       this.selector.querySelector('span[data-value="days"]').textContent = time.days;
+//       this.selector.querySelector('span[data-value="hours"]').textContent = time.hours;
+//       this.selector.querySelector('span[data-value="mins"]').textContent = time.mins;
+//       this.selector.querySelector('span[data-value="secs"]').textContent = time.secs;
+//     }, 1000);
+//   }
+//   getTime(time) {
+//     const days = this.pad(Math.floor(time / (1000 * 60 * 60 * 24)));
+//     const hours = this.pad(
+//       Math.floor((time % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))
+//     );
+//     const mins = this.pad(Math.floor((time % (1000 * 60 * 60)) / (1000 * 60)));
+//     const secs = this.pad(Math.floor((time % (1000 * 60)) / 1000));
+//     return { days, hours, mins, secs };
+//   }
+//   pad(value) {
+//     return String(value).padStart(2, "0");
+//   }
+// }
+// new CountdownTimer({selector: "#timer-1", targetDate: new Date("Jul 17, 2021")});
 
 var CountdownTimer = /*#__PURE__*/function () {
   function CountdownTimer(_ref) {
@@ -214,6 +253,8 @@ var CountdownTimer = /*#__PURE__*/function () {
 
     _classCallCheck(this, CountdownTimer);
 
+    this.intervalId = null;
+    this.isActive = false;
     this.targetDate = targetDate;
     this.selector = document.querySelector(selector);
     this.start();
@@ -228,19 +269,25 @@ var CountdownTimer = /*#__PURE__*/function () {
         return;
       }
 
+      var futureDate = this.targetDate;
       this.isActive = true;
-      this.intervalId = setInterval(function () {
+      this.intervalId = window.setInterval(function () {
         var currentTime = Date.now();
-        var deltaTime = _this.targetDate - currentTime;
+        var deltaTime = futureDate - currentTime;
 
         var time = _this.getTime(deltaTime);
 
-        console.log(time);
         _this.selector.querySelector('span[data-value="days"]').textContent = time.days;
         _this.selector.querySelector('span[data-value="hours"]').textContent = time.hours;
         _this.selector.querySelector('span[data-value="mins"]').textContent = time.mins;
         _this.selector.querySelector('span[data-value="secs"]').textContent = time.secs;
       }, 1000);
+    }
+  }, {
+    key: "stop",
+    value: function stop() {
+      clearInterval(this.intervalId);
+      this.isActive = false; // const time = this.getTime(0);
     }
   }, {
     key: "getTime",
@@ -266,10 +313,18 @@ var CountdownTimer = /*#__PURE__*/function () {
   return CountdownTimer;
 }();
 
-new CountdownTimer({
+var timer = new CountdownTimer({
   selector: "#timer-1",
   targetDate: new Date("Jul 17, 2021")
 });
+refs.startBnt.addEventListener('click', function () {
+  timer.start();
+});
+refs.stoptBnt.addEventListener('click', function () {
+  timer.stop();
+}); // function updateClock({days, hours, mins, secs}){
+//   refs.timerFace.textContent = `${days}:${hours}:${mins}:${secs}`;
+// }
 },{"./scss/main.scss":"scss/main.scss"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
@@ -298,7 +353,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "62187" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "55941" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
